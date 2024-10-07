@@ -14,5 +14,6 @@
   },
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
-  }
+  },
+  "ignorePatterns": ["lint-staged.config.mjs", "commitlint.config.mjs"]
 }
