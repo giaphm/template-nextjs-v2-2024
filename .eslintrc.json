@@ -13,6 +13,6 @@
     "@typescript-eslint/no-explicit-any": "error"
   },
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.eslint.json"
   }
 }
