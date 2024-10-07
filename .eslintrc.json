@@ -1,8 +1,18 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier"
+  ],
   "rules": {
     "prefer-const": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error"
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
   }
 }
