@@ -10,10 +10,20 @@
   "rules": {
     "prefer-const": "error",
     "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/no-explicit-any": "error"
+    "@typescript-eslint/no-explicit-any": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ]
   },
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
   },
-  "ignorePatterns": ["lint-staged.config.mjs", "commitlint.config.mjs"]
+  "ignorePatterns": [
+    "lint-staged.config.mjs",
+    "commitlint.config.mjs",
+    "next.config.mjs"
+  ]
 }
