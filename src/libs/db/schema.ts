@@ -1,21 +1,17 @@
 import { relations } from 'drizzle-orm'
-import {
-  integer,
-  pgTable,
-  serial,
-  text,
-  timestamp,
-  varchar,
-} from 'drizzle-orm/pg-core'
+import { integer, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 export const userTable = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),
   name: varchar('name').notNull(),
 })
 
+export type User = typeof userTable.$inferSelect
+export type NewUser = typeof userTable.$inferInsert
+
 export const sessionTable = pgTable('session', {
-  id: serial('id').primaryKey(),
-  userId: serial('user_id')
+  id: text('id').primaryKey(),
+  userId: integer('user_id')
     .notNull()
     .references(() => userTable.id),
   expiresAt: timestamp('expires_at', {
@@ -25,7 +21,7 @@ export const sessionTable = pgTable('session', {
 })
 
 export const postTable = pgTable('posts', {
-  id: serial('id').primaryKey(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),
   title: varchar('title').notNull(),
   content: text('content').notNull(),
   authorId: integer('author_id')
@@ -33,8 +29,11 @@ export const postTable = pgTable('posts', {
     .notNull(),
 })
 
+export type Post = typeof postTable.$inferSelect
+export type NewPost = typeof postTable.$inferInsert
+
 export const commentTable = pgTable('comments', {
-  id: serial('id').primaryKey(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),
   text: text('text'),
   authorId: integer('author_id')
     .references(() => userTable.id, { onDelete: 'cascade' })
@@ -43,6 +42,9 @@ export const commentTable = pgTable('comments', {
     .references(() => postTable.id, { onDelete: 'cascade' })
     .notNull(),
 })
+
+export type Comment = typeof commentTable.$inferSelect
+export type NewComment = typeof commentTable.$inferInsert
 
 export const usersRelations = relations(userTable, ({ many }) => ({
   posts: many(postTable),

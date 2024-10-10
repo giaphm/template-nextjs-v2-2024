@@ -1,25 +1,25 @@
 CREATE TABLE IF NOT EXISTS "comments" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "comments_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 100 CACHE 1),
 	"text" text,
 	"author_id" integer NOT NULL,
 	"post_id" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "posts" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "posts_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 100 CACHE 1),
 	"title" varchar NOT NULL,
 	"content" text NOT NULL,
 	"author_id" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "session" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" serial NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" integer NOT NULL,
 	"expires_at" timestamp with time zone NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "users_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 100 CACHE 1),
 	"name" varchar NOT NULL
 );
 --> statement-breakpoint
