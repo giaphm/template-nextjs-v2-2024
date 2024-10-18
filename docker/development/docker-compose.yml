@@ -1,38 +1,38 @@
 services:
-  next-app:
-    container_name: next-app
-    build:
-      context: ../../
-      dockerfile: docker/development/Dockerfile
-      target: development
-    # Set environment variables directly in the docker-compose file
-    # the .env file and docker-compose file in the same directory
-    # environment:
-    #   ENV_VARIABLE: ${ENV_VARIABLE}
-    #   NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
-    command: pnpm dev
-    # Set environment variables through a .env file
-    env_file:
-      - ../../.env
-    volumes:
-      - staticbuild:/app/node_modules
-      - ../.././:/app/
-    restart: always
-    # ports:
-    #   - 3000:3000
-    networks:
-      - app_network
+  # next-app:
+  #   container_name: next-app
+  #   build:
+  #     context: ../../
+  #     dockerfile: docker/development/Dockerfile
+  #     target: development
+  #   # Set environment variables directly in the docker-compose file
+  #   # the .env file and docker-compose file in the same directory
+  #   # environment:
+  #   #   ENV_VARIABLE: ${ENV_VARIABLE}
+  #   #   NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+  #   command: pnpm dev
+  #   # Set environment variables through a .env file
+  #   env_file:
+  #     - ../../.env
+  #   volumes:
+  #     - staticbuild:/app/node_modules
+  #     - ../.././:/app/
+  #   restart: always
+  #   # ports:
+  #   #   - 3000:3000
+  #   networks:
+  #     - app_network
 
-  nginx:
-    build:
-      context: ../../nginx
-      # dockerfile: nginx/Dockerfile
-    depends_on:
-      - next-app
-    ports:
-      - 80:80
-    networks:
-      - app_network
+  # nginx:
+  #   build:
+  #     context: ../../nginx
+  #     # dockerfile: nginx/Dockerfile
+  #   depends_on:
+  #     - next-app
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - app_network
 
   postgres:
     image: postgres

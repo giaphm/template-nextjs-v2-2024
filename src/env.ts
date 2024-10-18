@@ -8,21 +8,25 @@ export default createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
-    OPEN_AI_API_KEY: z.string().min(1),
     DB_HOST: z.string().min(1),
     DB_PORT: z.number().positive(),
     DB_USERNAME: z.string().min(4),
     DB_PASSWORD: z.string().min(4),
     DB_NAME: z.string().min(3),
+    NODE_ENV: z.string().optional(),
+    EMAIL_FROM: z.string().min(1),
+    EMAIL_SERVER_HOST: z.string().min(1),
+    EMAIL_SERVER_PORT: z.string().min(1),
+    EMAIL_SERVER_USER: z.string().min(1),
+    EMAIL_SERVER_PASSWORD: z.string().min(1),
+    HOST_NAME: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
    *
    * 💡 You'll get type errors if these are not prefixed with NEXT_PUBLIC_.
    */
-  client: {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
-  },
+  client: {},
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
    * we need to manually destructure them to make sure all are included in bundle.
@@ -31,14 +35,17 @@ export default createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
-    OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
     DB_HOST: process.env.DB_HOST,
     DB_PORT: Number(process.env.DB_PORT),
     DB_USERNAME: process.env.DB_USERNAME,
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_NAME: process.env.DB_NAME,
-
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NODE_ENV: process.env.NODE_ENV,
+    EMAIL_FROM: process.env.EMAIL_FROM,
+    EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
+    EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
+    EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
+    EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
+    HOST_NAME: process.env.HOST_NAME,
   },
 })

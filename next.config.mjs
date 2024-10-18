@@ -6,6 +6,8 @@ const jiti = createJiti(fileURLToPath(import.meta.url))
 await jiti.import('./src/env')
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  output: 'standalone',
+}
 
 export default nextConfig

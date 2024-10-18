@@ -1,12 +1,5 @@
 {
-  "extends": [
-    "airbnb",
-    "airbnb-typescript",
-    "airbnb/hooks",
-    "next/core-web-vitals",
-    "next/typescript",
-    "prettier"
-  ],
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
   "rules": {
     "prefer-const": "error",
     "@typescript-eslint/no-unused-vars": "error",
@@ -16,7 +9,13 @@
       {
         "devDependencies": true
       }
-    ]
+    ],
+    "import/prefer-default-export": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-useless-constructor": "off",
+    "max-classes-per-file": "off"
   },
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
