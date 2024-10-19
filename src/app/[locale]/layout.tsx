@@ -67,7 +67,7 @@ export default function RootLayout({
         <Providers>
           <NextTopLoader />
           {appMode === "live" && <Header />}
-          {children}
+          <main>{children}</main>
         </Providers>
         <Toaster />
         <BreakpointOverlay />
