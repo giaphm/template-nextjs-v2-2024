@@ -1,8 +1,4 @@
-import crypto from 'crypto'
-
-export const TOKEN_LENGTH = 32
-export const TOKEN_TTL = 1000 * 60 * 5 // 5m
-export const VERIFY_EMAIL_TTL = 1000 * 60 * 60 * 24 * 7 // 7 days
+import crypto from "crypto"
 
 export async function generateRandomToken(length: number) {
   const buffer = await new Promise<Buffer>((resolve, reject) => {
@@ -12,5 +8,5 @@ export async function generateRandomToken(length: number) {
     })
   })
 
-  return buffer.toString('hex').slice(0, length)
+  return buffer.toString("hex").slice(0, length)
 }

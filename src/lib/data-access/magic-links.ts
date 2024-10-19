@@ -1,6 +1,7 @@
-import { eq } from 'drizzle-orm'
-import { generateRandomToken, TOKEN_LENGTH, TOKEN_TTL } from '../auth/tokens'
-import { db, magicLinks } from '../db'
+import { eq } from "drizzle-orm"
+import { generateRandomToken } from "../auth/tokens"
+import { db, magicLinks } from "../db"
+import { TOKEN_LENGTH, TOKEN_TTL } from "~/app-config"
 
 export async function upsertMagicLink(email: string) {
   const token = await generateRandomToken(TOKEN_LENGTH)

@@ -1,5 +1,5 @@
-import { RateLimitError } from '../use-cases/errors'
-import { getIp } from './get-ip'
+import { RateLimitError } from "../use-cases/errors"
+import { getIp } from "./get-ip"
 
 const PRUNE_INTERVAL = 60 * 1000
 
@@ -18,13 +18,13 @@ function pruneTrackers() {
 setInterval(pruneTrackers, PRUNE_INTERVAL)
 
 export async function rateLimitByKey({
-  key = 'global',
+  key = "global",
   limit = 1,
   window = 10000,
 }: {
   key: string
-  limit: number
-  window: number
+  limit?: number
+  window?: number
 }) {
   const tracker = trackers.get(key) || { count: 0, expiresAt: 0 }
 
@@ -43,7 +43,7 @@ export async function rateLimitByKey({
 }
 
 export async function rateLimitByIp({
-  key = 'global',
+  key = "global",
   limit = 1,
   window = 10000,
 }: {

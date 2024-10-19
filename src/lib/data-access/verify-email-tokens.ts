@@ -1,6 +1,7 @@
-import { eq } from 'drizzle-orm'
-import { db, verifyEmailTokens } from '../db'
-import { generateRandomToken, TOKEN_LENGTH, TOKEN_TTL } from '../auth/tokens'
+import { eq } from "drizzle-orm"
+import { db, verifyEmailTokens } from "../db"
+import { generateRandomToken } from "../auth/tokens"
+import { TOKEN_LENGTH, TOKEN_TTL } from "~/app-config"
 
 export async function createVerifyEmailToken(userId: number) {
   const token = await generateRandomToken(TOKEN_LENGTH)

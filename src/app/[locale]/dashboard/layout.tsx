@@ -1,18 +1,18 @@
-import { Metadata } from 'next'
-import React from 'react'
-import { I18nProviderClient } from '~/lib/locales/client'
-import { getI18n } from '~/lib/locales/server'
+import { Metadata } from "next"
+import React from "react"
+import { I18nProviderClient } from "~/lib/locales/client"
+import { getScopedI18n } from "~/lib/locales/server"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getI18n()
+  const t = await getScopedI18n("dashboard.metadata")
 
   return {
-    title: t('hello'),
-    description: t('hello.world'),
+    title: t("title"),
+    description: t("desc"),
   }
 }
 
-export default function SignupLayout({
+export default function DashboardLayout({
   params: { locale },
   children,
 }: Readonly<{
