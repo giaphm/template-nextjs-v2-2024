@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { usePathname } from 'next/navigation'
-import React from 'react'
-import { Button } from '~/components/ui/button'
-import useMediaQuery from '~/hooks/use-media-query'
-import Link from 'next/link'
-import { BookIcon, SearchIcon, UsersIcon } from 'lucide-react'
+import { usePathname } from "next/navigation"
+import React from "react"
+import { Button } from "~/components/ui/button"
+import useMediaDeviceDetect from "~/hooks/use-media-device-detect"
+import Link from "next/link"
+import { BookIcon, SearchIcon, UsersIcon } from "lucide-react"
 
 export default function HeaderLinks({
   isAuthenticated,
@@ -13,8 +13,8 @@ export default function HeaderLinks({
   isAuthenticated: boolean
 }) {
   const path = usePathname()
-  const { isMobile } = useMediaQuery()
-  const isLandingPage = path === '/'
+  const { isMobile } = useMediaDeviceDetect()
+  const isLandingPage = path === "/"
 
   if (isMobile) {
     return null

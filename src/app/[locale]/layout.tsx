@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import localFont from "next/font/local"
 import "../globals.css"
 import Providers from "~/components/providers"
 import { Toaster } from "~/components/ui/toaster"
@@ -7,17 +6,7 @@ import NextTopLoader from "nextjs-toploader"
 import { BreakpointOverlay } from "~/components/breakpoint-overlay"
 import { appMode } from "~/app-config"
 import Header from "../_header/header"
-
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-})
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-})
+import { geistMono, geistSans } from "~/utils/fonts"
 
 export const metadata: Metadata = {
   title: "Create Next App",

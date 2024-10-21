@@ -4,16 +4,14 @@ import {
   index,
   integer,
   pgEnum,
-  pgTableCreator,
   text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core"
+import { pgTable } from "./utils"
 
 export const roleEnum = pgEnum("role", ["member", "admin"])
 export const accountTypeEnum = ["email", "google", "github"] as const
-
-const pgTable = pgTableCreator((name) => `app_${name}`)
 
 export const users = pgTable("users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),

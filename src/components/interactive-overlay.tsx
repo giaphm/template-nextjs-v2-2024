@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, ReactNode, useRef } from "react"
-import useMediaQuery from "~/hooks/use-media-query"
+import useMediaDeviceDetect from "~/hooks/use-media-device-detect"
 import {
   Sheet,
   SheetContent,
@@ -43,7 +43,7 @@ export default function InteractiveOverlay({
   title: string
   description: string
 }) {
-  const { isMobile } = useMediaQuery()
+  const { isMobile } = useMediaDeviceDetect()
   const preventCloseRef = useRef<boolean>(false)
 
   return (
