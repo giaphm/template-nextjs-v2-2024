@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker"
 import { CheckCircledIcon, CircleIcon } from "@radix-ui/react-icons"
-import { NewUser } from "~/lib/db"
+import { type NewUser } from "~/lib/db"
 
 export function generateRandomUser(): NewUser {
   return {

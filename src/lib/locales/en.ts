@@ -29,4 +29,5 @@ export default {
       "desc": "Dashboard",
     },
   },
+  "passwordNotMatched": "Passwords not matched",
 } as const

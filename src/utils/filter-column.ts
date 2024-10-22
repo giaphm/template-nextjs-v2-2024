@@ -47,6 +47,21 @@ export function filterColumn({
     }
   }
 
+  if (column.dataType === "number") {
+    switch (filterOperator) {
+      case "eq":
+        return eq(column, filterValue)
+      case "notEq":
+        return not(eq(column, filterValue))
+      case "isNull":
+        return isNull(column)
+      case "isNotNull":
+        return isNotNull(column)
+      default:
+        return eq(column, filterValue)
+    }
+  }
+
   switch (filterOperator) {
     case "ilike":
       return ilike(column, `%${filterValue}%`)

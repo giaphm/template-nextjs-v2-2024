@@ -23,4 +23,5 @@ export default {
       "desc": "Dashboard",
     },
   },
+  "passwordNotMatched": "Mật khẩu nhập lại ko hợp đúng",
 } as const
