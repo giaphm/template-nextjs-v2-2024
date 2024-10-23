@@ -140,6 +140,10 @@ export const subscriptions = pgTable(
     stripeCustomerId: text("stripe_customer_id").notNull(),
     stripePriceId: text("stripe_price_id").notNull(),
     stripeCurrentPeriodEnd: timestamp("expires", { mode: "date" }).notNull(),
+    createdOn: timestamp("created_on").defaultNow().notNull(),
+    updatedOn: timestamp("updated_on", { mode: "date" }).$onUpdate(
+      () => new Date()
+    ),
   },
   (table) => ({
     stripeSubscriptionIdIdx: index(
@@ -163,6 +167,10 @@ export const following = pgTable(
     foreignUserId: integer("foreignUserId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    createdOn: timestamp("created_on").defaultNow().notNull(),
+    updatedOn: timestamp("updated_on", { mode: "date" }).$onUpdate(
+      () => new Date()
+    ),
   },
   (table) => ({
     userIdForeignUserIdIdx: index("following_user_id_foreign_user_id_idx").on(
@@ -175,6 +183,10 @@ export const following = pgTable(
 export const newsletters = pgTable("gf_newsletter", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),
   email: text("email").notNull().unique(),
+  createdOn: timestamp("created_on").defaultNow().notNull(),
+  updatedOn: timestamp("updated_on", { mode: "date" }).$onUpdate(
+    () => new Date()
+  ),
 })
 
 export const groups = pgTable(
@@ -195,6 +207,10 @@ export const groups = pgTable(
     discordLink: text("discordLink").default(""),
     githubLink: text("githubLink").default(""),
     xLink: text("x_link").default(""),
+    createdOn: timestamp("created_on").defaultNow().notNull(),
+    updatedOn: timestamp("updated_on", { mode: "date" }).$onUpdate(
+      () => new Date()
+    ),
   },
   (table) => ({
     userIdIsPublicIdx: index("groups_user_id_is_public_idx").on(
@@ -219,7 +235,11 @@ export const memberships = pgTable(
     groupId: integer("group_id")
       .references(() => groups.id, { onDelete: "cascade" })
       .notNull(),
-    role: roleEnum("role").default("member"),
+    role: roleEnum("role").default("member").notNull(),
+    createdOn: timestamp("created_on").defaultNow().notNull(),
+    updatedOn: timestamp("updated_on", { mode: "date" }).$onUpdate(
+      () => new Date()
+    ),
   },
   (table) => ({
     userIdGroupIdIdx: index("memberships_user_id_group_id_idx").on(
@@ -228,6 +248,9 @@ export const memberships = pgTable(
     ),
   })
 )
+
+export type Membership = typeof memberships.$inferSelect
+export type NewMembership = typeof memberships.$inferInsert
 
 export const invites = pgTable("invites", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),
@@ -239,6 +262,10 @@ export const invites = pgTable("invites", {
   groupId: integer("group_id")
     .references(() => groups.id, { onDelete: "cascade" })
     .notNull(),
+  createdOn: timestamp("created_on").defaultNow().notNull(),
+  updatedOn: timestamp("updated_on", { mode: "date" }).$onUpdate(
+    () => new Date()
+  ),
 })
 
 export const events = pgTable("events", {
