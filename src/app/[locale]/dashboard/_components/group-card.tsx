@@ -1,3 +1,6 @@
+import { UsersIcon } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -10,10 +13,6 @@ import {
 import { Group } from "~/lib/db/schema"
 import { cn } from "~/lib/utils"
 import { cardStyles } from "~/styles/common"
-import { UsersIcon } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { getGroupImageUrl } from "../groups/[groupsId]/settings/utils"
 
 export function GroupCard({
   group,
@@ -28,7 +27,7 @@ export function GroupCard({
     <Card className={cn(cardStyles)}>
       <CardHeader>
         <Image
-          src={getGroupImageUrl(group)}
+          src={""}
           width={200}
           height={200}
           alt="image of the group"

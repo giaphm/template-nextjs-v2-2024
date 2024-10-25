@@ -1,5 +1,5 @@
 import { count, eq } from "drizzle-orm"
-import { db, groups, memberships, NewGroup } from "../db"
+import { db, Group, groups, memberships, NewGroup } from "../db"
 import { UserId } from "../use-cases/types"
 import { omit } from "~/utils/utils"
 
@@ -53,4 +53,10 @@ export async function countUserGroups(userId: UserId) {
 
 export async function createGroup(group: NewGroup) {
   await db.insert(groups).values(group)
+}
+
+export async function getGroupById(groupId: Group["id"]) {
+  return await db.query.groups.findFirst({
+    where: eq(groups.id, groupId),
+  })
 }
