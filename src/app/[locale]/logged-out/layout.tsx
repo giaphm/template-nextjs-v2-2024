@@ -2,14 +2,14 @@ import { Metadata } from "next"
 import { setStaticParamsLocale } from "next-international/server"
 import React from "react"
 import { I18nProviderClient } from "~/lib/locales/client"
-import { getI18n, getStaticParams } from "~/lib/locales/server"
+import { getScopedI18n, getStaticParams } from "~/lib/locales/server"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getI18n()
+  const t = await getScopedI18n("dashboard.metadata")
 
   return {
-    title: t("hello"),
-    description: t("hello.world"),
+    title: t("title"),
+    description: t("desc"),
   }
 }
 
@@ -17,13 +17,14 @@ export function generateStaticParams() {
   return getStaticParams()
 }
 
-export default function LoginLayout({
+export default function DashboardLayout({
   params: { locale },
   children,
 }: Readonly<{
   params: { locale: string }
   children: React.ReactNode
 }>) {
+  // This is for getting locale using SSG i18n
   setStaticParamsLocale(locale)
 
   return <I18nProviderClient locale={locale}>{children}</I18nProviderClient>

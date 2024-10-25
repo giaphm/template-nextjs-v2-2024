@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
-import { Button } from '~/components/ui/button'
-import { pageTitleStyles } from '~/styles/common'
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import React, { useEffect } from "react"
+import { Button } from "~/components/ui/button"
+import { pageTitleStyles } from "~/styles/common"
 
 export default function LoggedOut() {
   const router = useRouter()

@@ -1,20 +1,26 @@
-import { Metadata } from 'next'
-import Image from 'next/image'
-import { getI18n } from '~/lib/locales/server'
+import { Metadata } from "next"
+import { setStaticParamsLocale } from "next-international/server"
+import Image from "next/image"
+import { getI18n } from "~/lib/locales/server"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getI18n()
 
   return {
-    title: t('hello'),
-    description: t('hello.world'),
+    title: t("hello"),
+    description: t("hello.world"),
   }
 }
 
-export default async function Home() {
+export default async function Home({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  setStaticParamsLocale(locale)
   const t = await getI18n()
 
-  console.log(t('hello'))
+  console.log(t("hello"))
 
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
@@ -29,7 +35,7 @@ export default async function Home() {
         />
         <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left">
           <li className="mb-2">
-            Get started by editing{' '}
+            Get started by editing{" "}
             <code className="rounded bg-black/[.05] px-1 py-0.5 font-semibold dark:bg-white/[.06]">
               src/app/page.tsx
             </code>

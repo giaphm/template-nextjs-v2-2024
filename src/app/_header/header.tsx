@@ -18,11 +18,11 @@ export default async function Header() {
         <div className="flex items-center justify-between gap-10">
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/group.jpeg"
+              src="/nextjs.jpeg"
               alt="Group Finder Logo"
               width={40}
               height={40}
-              className="rounded-full"
+              className="h-[40px] w-[40px] rounded-full"
             />
             <span className="text-sm font-bold md:text-base lg:text-2xl">
               {applicationName}

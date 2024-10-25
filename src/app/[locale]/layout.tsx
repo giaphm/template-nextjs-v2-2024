@@ -5,8 +5,9 @@ import { Toaster } from "~/components/ui/toaster"
 import NextTopLoader from "nextjs-toploader"
 import { BreakpointOverlay } from "~/components/breakpoint-overlay"
 import { appMode } from "~/app-config"
-import Header from "../_header/header"
 import { geistMono, geistSans } from "~/utils/fonts"
+import { getStaticParams } from "~/lib/locales/server"
+import { setStaticParamsLocale } from "next-international/server"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -40,14 +41,18 @@ export const metadata: Metadata = {
 }
 
 export async function generateStaticParams() {
-  return [{ lang: "en" }, { lang: "vn" }]
+  return getStaticParams()
 }
 
 export default function RootLayout({
+  params: { locale },
   children,
 }: Readonly<{
+  params: { locale: string }
   children: React.ReactNode
 }>) {
+  setStaticParamsLocale(locale)
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -55,7 +60,6 @@ export default function RootLayout({
       >
         <Providers>
           <NextTopLoader />
-          {appMode === "live" && <Header />}
           <main>{children}</main>
         </Providers>
         <Toaster />

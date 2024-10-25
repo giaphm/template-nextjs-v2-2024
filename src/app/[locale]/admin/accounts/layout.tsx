@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import React from "react"
 import { I18nProviderClient } from "~/lib/locales/client"
-import { getI18n } from "~/lib/locales/server"
+import { getI18n, getStaticParams } from "~/lib/locales/server"
 import {
   SidebarInset,
   SidebarProvider,
@@ -17,6 +17,7 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb"
 import { Separator } from "~/components/ui/separator"
+import { setStaticParamsLocale } from "next-international/server"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getI18n()
@@ -27,6 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+export function generateStaticParams() {
+  return getStaticParams()
+}
+
 export default function AccountManagementLayout({
   params: { locale },
   children,
@@ -34,6 +39,8 @@ export default function AccountManagementLayout({
   params: { locale: string }
   children: React.ReactNode
 }>) {
+  setStaticParamsLocale(locale)
+
   return (
     <I18nProviderClient locale={locale}>
       <SidebarProvider>

@@ -1,16 +1,23 @@
-import Link from 'next/link'
-import { cn } from '~/lib/utils'
-import { buttonVariants } from '~/components/ui/button'
-import { getScopedI18n } from '~/lib/locales/server'
-import { GithubIcon, GoogleIcon } from '~/components/icons'
-import { Icon as Iconfiy } from '@iconify/react'
-import { getCurrentUser } from '~/lib/auth'
-import { redirect } from 'next/navigation'
-import { PATHS } from '~/app-config'
-import { MagicLinkForm } from './_components/magic-link-form'
+import Link from "next/link"
+import { cn } from "~/lib/utils"
+import { buttonVariants } from "~/components/ui/button"
+import { getScopedI18n } from "~/lib/locales/server"
+import { GithubIcon, GoogleIcon } from "~/components/icons"
+import { Icon as Iconfiy } from "@iconify/react"
+import { getCurrentUser } from "~/lib/auth"
+import { redirect } from "next/navigation"
+import { PATHS } from "~/app-config"
+import { MagicLinkForm } from "./_components/magic-link-form"
+import { setStaticParamsLocale } from "next-international/server"
 
-export default async function LogIn() {
-  const scopedT = await getScopedI18n('logIn')
+export default async function LogIn({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  setStaticParamsLocale(locale)
+
+  const scopedT = await getScopedI18n("logIn")
   const user = await getCurrentUser()
 
   if (user) {
@@ -51,7 +58,7 @@ export default async function LogIn() {
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="mb-6 flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              {scopedT('title')}
+              {scopedT("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
               Enter your email below to create your account
@@ -75,9 +82,9 @@ export default async function LogIn() {
               href="/login/email"
               className={cn(
                 buttonVariants({
-                  variant: 'secondary',
+                  variant: "secondary",
                 }),
-                'w-full'
+                "w-full"
               )}
             >
               <Iconfiy
@@ -102,9 +109,9 @@ export default async function LogIn() {
               href="/api/login/google"
               className={cn(
                 buttonVariants({
-                  variant: 'secondary',
+                  variant: "secondary",
                 }),
-                'w-full'
+                "w-full"
               )}
             >
               <GoogleIcon className="mr-2 h-5 w-5 stroke-white" />
@@ -114,9 +121,9 @@ export default async function LogIn() {
               href="/api/login/github"
               className={cn(
                 buttonVariants({
-                  variant: 'secondary',
+                  variant: "secondary",
                 }),
-                'w-full'
+                "w-full"
               )}
             >
               <GithubIcon className="mr-2 h-5 w-5" />
@@ -138,23 +145,23 @@ export default async function LogIn() {
               href="/signup"
               className={cn(
                 buttonVariants({
-                  variant: 'secondary',
+                  variant: "secondary",
                 }),
-                'w-full'
+                "w-full"
               )}
             >
               Sign up with email
             </Link>
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{' '}
+            By clicking continue, you agree to our{" "}
             <Link
               href="/terms"
               className="underline underline-offset-4 hover:text-primary"
             >
               Terms of Service
-            </Link>{' '}
-            and{' '}
+            </Link>{" "}
+            and{" "}
             <Link
               href="/privacy"
               className="underline underline-offset-4 hover:text-primary"

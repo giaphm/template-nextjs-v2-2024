@@ -66,7 +66,7 @@ export function CreateGroupDialog() {
             New group
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-h-[50%] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create group</DialogTitle>
             <DialogDescription>
