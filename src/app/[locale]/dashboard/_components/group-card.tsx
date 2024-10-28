@@ -13,6 +13,7 @@ import {
 import { Group } from "~/lib/db/schema"
 import { cn } from "~/lib/utils"
 import { cardStyles } from "~/styles/common"
+import { getGroupImageUrl } from "../groups/[groupsId]/settings/utils"
 
 export function GroupCard({
   group,
@@ -27,7 +28,7 @@ export function GroupCard({
     <Card className={cn(cardStyles)}>
       <CardHeader>
         <Image
-          src={""}
+          src={getGroupImageUrl(group)}
           width={200}
           height={200}
           alt="image of the group"

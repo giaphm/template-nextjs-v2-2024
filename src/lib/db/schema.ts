@@ -223,6 +223,8 @@ export const groups = pgTable(
 export type Group = typeof groups.$inferSelect
 export type NewGroup = typeof groups.$inferInsert
 
+export type GroupId = Group["id"]
+
 export const memberships = pgTable(
   "membership",
   {
