@@ -1,13 +1,36 @@
-import { fileURLToPath } from 'node:url'
-import { createJiti } from 'jiti'
-const jiti = createJiti(fileURLToPath(import.meta.url))
+import { createMDX } from "fumadocs-mdx/next"
 
-// Import env here to validate during build. Using jiti we can import .ts files :)
-await jiti.import('./src/env')
+const withMDX = createMDX()
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: "standalone",
+  reactStrictMode: true,
+  experimental: {
+    serverComponentsExternalPackages: ["@aws-sdk/s3-request-presigner"],
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+        port: "",
+        pathname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+        pathname: "**",
+      },
+    ],
+  },
 }
 
-export default nextConfig
+export default withMDX(nextConfig)

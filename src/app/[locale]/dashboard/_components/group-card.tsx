@@ -13,7 +13,7 @@ import {
 import { Group } from "~/lib/db/schema"
 import { cn } from "~/lib/utils"
 import { cardStyles } from "~/styles/common"
-import { getGroupImageUrl } from "../groups/[groupsId]/settings/utils"
+import { getGroupImageUrl } from "../groups/[groupId]/settings/util"
 
 export function GroupCard({
   group,

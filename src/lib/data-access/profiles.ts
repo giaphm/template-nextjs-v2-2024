@@ -1,6 +1,6 @@
-import { eq } from 'drizzle-orm'
-import { db, profiles } from '../db'
-import { UserId } from '../use-cases/types'
+import { eq } from "drizzle-orm"
+import { db, Profile, profiles } from "../db"
+import { UserId } from "../use-cases/types"
 
 export async function createProfile(
   userId: number,
@@ -26,4 +26,14 @@ export async function getProfile(userId: UserId) {
   })
 
   return profile
+}
+
+export async function updateProfile(
+  userId: UserId,
+  updateProfile: Partial<Profile>
+) {
+  await db
+    .update(profiles)
+    .set(updateProfile)
+    .where(eq(profiles.userId, userId))
 }

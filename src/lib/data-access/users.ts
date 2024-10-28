@@ -1,8 +1,8 @@
-import { eq } from 'drizzle-orm'
-import { accounts, db, User, users } from '../db'
-import { UserId } from '../use-cases/types'
-import { hashPassword } from '../auth/hashing'
-import { getAccountByUserId } from './accounts'
+import { eq } from "drizzle-orm"
+import { accounts, db, User, users } from "../db"
+import { UserId } from "../use-cases/types"
+import { hashPassword } from "../auth/hashing"
+import { getAccountByUserId } from "./accounts"
 
 export async function getUserByEmail(email: string): Promise<User | undefined> {
   const user = await db.query.users.findFirst({
@@ -72,8 +72,12 @@ export async function createMagicUser(email: string) {
 
   await db
     .insert(accounts)
-    .values({ userId: user.id, accountType: 'email' })
+    .values({ userId: user.id, accountType: "email" })
     .returning()
 
   return user
+}
+
+export async function deleteUser(userId: UserId) {
+  await db.delete(users).where(eq(users.id, userId))
 }

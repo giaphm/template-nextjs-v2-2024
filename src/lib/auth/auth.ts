@@ -1,29 +1,34 @@
-import 'server-only'
+import "server-only"
 import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
-} from '@oslojs/encoding'
-import { sha256 } from '@oslojs/crypto/sha2'
-import { eq } from 'drizzle-orm'
-import { cookies } from 'next/headers'
-import { cache } from 'react'
-import env from '~/env'
-import { db, Session, sessions, User, users } from '../db'
-import { UserId } from '../use-cases/types'
-import { AuthenticationError } from '../use-cases/errors'
+} from "@oslojs/encoding"
+import { sha256 } from "@oslojs/crypto/sha2"
+import { eq } from "drizzle-orm"
+import { cookies } from "next/headers"
+import { cache } from "react"
+import env from "~/env"
+import { db, Session, sessions, User, users } from "../db"
+import { UserId } from "../use-cases/types"
+import { AuthenticationError } from "../use-cases/errors"
+import { GitHub, Google } from "arctic"
 
-const SESSION_COOKIE_NAME = 'session'
+const SESSION_COOKIE_NAME = "session"
 
 const SESSION_REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 24 * 15
 const SESSION_MAX_DURATION_MS = SESSION_REFRESH_INTERVAL_MS * 2
 
-// export const github = new GitHub(env.GITHUB_CLIENT_ID, env.GITHUB_CLIENT_SECRET)
+export const github = new GitHub(
+  env.GITHUB_CLIENT_ID,
+  env.GITHUB_CLIENT_SECRET,
+  `${env.HOST_NAME}/api/login/github/callback`
+)
 
-// export const googleAuth = new Google(
-//   env.GOOGLE_CLIENT_ID,
-//   env.GOOGLE_CLIENT_SECRET,
-//   `${env.HOST_NAME}/api/login/google/callback`
-// )
+export const googleAuth = new Google(
+  env.GOOGLE_CLIENT_ID,
+  env.GOOGLE_CLIENT_SECRET,
+  `${env.HOST_NAME}/api/login/google/callback`
+)
 
 export function generateSessionToken(): string {
   const bytes = new Uint8Array(20)
@@ -107,20 +112,20 @@ export async function invalidateUserSessions(userId: UserId): Promise<void> {
 export function setSessionTokenCookie(token: string, expiresAt: Date): void {
   cookies().set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: env.NODE_ENV === 'production',
+    sameSite: "lax",
+    secure: env.NODE_ENV === "production",
     expires: expiresAt,
-    path: '/',
+    path: "/",
   })
 }
 
 export function deleteSessionTokenCookie(): void {
-  cookies().set(SESSION_COOKIE_NAME, '', {
+  cookies().set(SESSION_COOKIE_NAME, "", {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: env.NODE_ENV === 'production',
+    sameSite: "lax",
+    secure: env.NODE_ENV === "production",
     maxAge: 0,
-    path: '/',
+    path: "/",
   })
 }
 

@@ -1,8 +1,116 @@
-import { getGroupById } from "../data-access/groups"
-import { getMembership } from "../data-access/memberships"
-import { GroupId } from "../db"
-import { AuthenticationError, NotFoundError } from "./errors"
-import { UserSession } from "./types"
+import { getEvent } from "~/lib/data-access/events"
+import { getGroupById } from "~/lib/data-access/groups"
+import { getMembership } from "~/lib/data-access/memberships"
+import { Group, GroupId } from "~/lib/db/schema"
+import { UserSession } from "~/lib/use-cases/types"
+import { AuthenticationError, NotFoundError, PublicError } from "./errors"
+
+function isGroupOwner(user: UserSession, group: Group) {
+  return user.id === group.userId
+}
+
+export async function hasAccessToGroup(
+  user: UserSession | undefined,
+  groupId: GroupId
+) {
+  const group = await getGroupById(groupId)
+
+  if (!group) {
+    throw new PublicError("Group not found")
+  }
+
+  if (group.isPublic) {
+    return true
+  }
+
+  if (!user) {
+    return false
+  }
+
+  const membership = await getMembership(user.id, groupId)
+
+  const isGroupOwner = group.userId === user.id
+  return !!membership || isGroupOwner
+}
+
+export async function isAdminOrOwnerOfGroup(
+  user: UserSession | undefined,
+  groupId: GroupId
+) {
+  if (!user) {
+    return false
+  }
+
+  const membership = await getMembership(user.id, groupId)
+  const group = await getGroupById(groupId)
+
+  if (!group) {
+    throw new PublicError("Group not found")
+  }
+
+  const isAdmin = membership?.role === "admin"
+  const isOwner = group.userId === user.id
+
+  return isAdmin || isOwner
+}
+
+export async function assertAdminOrOwnerOfGroup(
+  user: UserSession | undefined,
+  groupId: GroupId
+) {
+  if (!user) {
+    throw new NotFoundError("User not found")
+  }
+
+  if (!(await isAdminOrOwnerOfGroup(user, groupId))) {
+    throw new AuthenticationError()
+  }
+}
+
+export async function assertGroupOwner(
+  user: UserSession | undefined,
+  groupId: GroupId
+) {
+  const group = await getGroupById(groupId)
+
+  if (!group) {
+    throw new NotFoundError("Group not found")
+  }
+
+  if (!user) {
+    throw new AuthenticationError()
+  }
+
+  if (!isGroupOwner(user, group)) {
+    throw new AuthenticationError()
+  }
+
+  return group
+}
+
+export async function assertGroupMember(
+  user: UserSession | undefined,
+  groupId: GroupId
+) {
+  const group = await getGroupById(groupId)
+
+  if (!group) {
+    throw new NotFoundError("Group not found")
+  }
+
+  if (!user) {
+    throw new AuthenticationError()
+  }
+
+  const membership = await getMembership(user.id, groupId)
+  const isGroupOwner = group.userId === user.id
+
+  if (!membership && !isGroupOwner) {
+    throw new AuthenticationError()
+  }
+
+  return group
+}
 
 export async function assertGroupVisible(
   user: UserSession | undefined,
@@ -36,4 +144,14 @@ export async function assertGroupExists(groupId: GroupId) {
   }
 
   return group
+}
+
+export async function assertEventExists(eventId: number) {
+  const event = await getEvent(eventId)
+
+  if (!event) {
+    throw new NotFoundError("Event not found")
+  }
+
+  return event
 }

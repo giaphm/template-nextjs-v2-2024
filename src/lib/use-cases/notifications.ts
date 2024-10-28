@@ -1,9 +1,12 @@
 import {
+  deleteNotification,
   getNotificationById,
+  getReadNotificationsForUser,
+  getUnreadNotificationsForUser,
   updateNotification,
-} from '../data-access/notifications'
-import { AuthenticationError, NotFoundError } from './errors'
-import { UserSession } from './types'
+} from "~/lib/data-access/notifications"
+import { UserSession } from "./types"
+import { AuthenticationError, NotFoundError } from "./errors"
 
 export async function assertOwnsNotification(
   authenticatedUser: UserSession,
@@ -12,7 +15,7 @@ export async function assertOwnsNotification(
   const notification = await getNotificationById(notificationId)
 
   if (!notification) {
-    throw new NotFoundError(`Notification ${notificationId} not found`)
+    throw new NotFoundError("notification not found")
   }
 
   if (notification.userId !== authenticatedUser.id) {
@@ -27,10 +30,37 @@ export async function markNotificationAsReadUseCase(
   notificationId: number
 ) {
   await assertOwnsNotification(authenticatedUser, notificationId)
-
-  const notification = await updateNotification(notificationId, {
+  return await updateNotification(notificationId, {
     isRead: true,
   })
+}
 
-  return notification
+export async function clearReadNotificationsUseCase(
+  authenticatedUser: UserSession
+) {
+  const unreadNotifications = await getReadNotificationsForUser(
+    authenticatedUser.id
+  )
+
+  await Promise.all(
+    unreadNotifications.map((notification) =>
+      deleteNotification(notification.id)
+    )
+  )
+}
+
+export async function markAllNotificationsAsReadUseCase(
+  authenticatedUser: UserSession
+) {
+  const unreadNotifications = await getUnreadNotificationsForUser(
+    authenticatedUser.id
+  )
+
+  await Promise.all(
+    unreadNotifications.map((notification) =>
+      updateNotification(notification.id, {
+        isRead: true,
+      })
+    )
+  )
 }

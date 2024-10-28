@@ -275,14 +275,19 @@ export const invites = pgTable("invites", {
 
 export const events = pgTable("events", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),
-  groupId: integer("group_id").references(() => groups.id, {
-    onDelete: "cascade",
-  }),
+  groupId: integer("group_id")
+    .notNull()
+    .references(() => groups.id, {
+      onDelete: "cascade",
+    }),
   name: text("name").notNull(),
   description: text("description").notNull(),
   imageId: text("image_id"),
   startsOn: timestamp("startsOn", { mode: "date" }).notNull(),
 })
+
+export type Event = typeof events.$inferSelect
+export type NewEvent = typeof events.$inferInsert
 
 export const posts = pgTable(
   "posts",
@@ -297,7 +302,6 @@ export const posts = pgTable(
       .references(() => groups.id, { onDelete: "cascade" })
       .notNull(),
     title: varchar("title", { length: 255 }).notNull(),
-    excerpt: varchar("excerpt", { length: 255 }).notNull(),
     message: text("message").notNull(),
     status: varchar("status", { length: 10, enum: ["draft", "published"] })
       .default("draft")
@@ -322,12 +326,12 @@ export const notifications = pgTable("notifications", {
   userId: integer("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  groupId: integer("group_id")
-    .notNull()
-    .references(() => groups.id, { onDelete: "cascade" }),
-  postId: integer("post_id")
-    .notNull()
-    .references(() => posts.id, { onDelete: "cascade" }),
+  groupId: integer("group_id").references(() => groups.id, {
+    onDelete: "cascade",
+  }),
+  postId: integer("post_id").references(() => posts.id, {
+    onDelete: "cascade",
+  }),
   isRead: boolean("is_read").notNull().default(false),
   type: text("type").notNull(),
   message: text("message").notNull(),
@@ -359,6 +363,9 @@ export const replies = pgTable(
     postIdIdx: index("replies_post_id_idx").on(table.postId),
   })
 )
+
+export type Reply = typeof replies.$inferSelect
+export type NewReply = typeof replies.$inferInsert
 
 export const comments = pgTable("comments", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity({ startWith: 100 }),

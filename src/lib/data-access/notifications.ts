@@ -1,11 +1,65 @@
-import { and, eq } from 'drizzle-orm'
-import { db, Notification, notifications } from '../db'
-import { UserId } from '../use-cases/types'
+import { db } from "~/lib/db"
+import { GroupId, Notification, notifications } from "~/lib/db/schema"
+import { UserId } from "~/lib/use-cases/types"
+import { and, eq } from "drizzle-orm"
 
+const MAX_NOTIFICATIONS_TO_RETURN = 30
 const MAX_NOTIFICATIONS_IN_HEADER = 3
 
+export async function createNotification(notification: {
+  userId: UserId
+  groupId: GroupId
+  postId?: number
+  type: string
+  message: string
+  createdOn: Date
+}) {
+  const [createdNotification] = await db
+    .insert(notifications)
+    .values(notification)
+    .returning()
+  return createdNotification
+}
+
+export async function getUnreadNotificationsForUser(userId: UserId) {
+  return await db.query.notifications.findMany({
+    where: and(
+      eq(notifications.userId, userId),
+      eq(notifications.isRead, false)
+    ),
+    limit: MAX_NOTIFICATIONS_TO_RETURN,
+  })
+}
+
+export async function getReadNotificationsForUser(userId: UserId) {
+  return await db.query.notifications.findMany({
+    where: and(
+      eq(notifications.userId, userId),
+      eq(notifications.isRead, true)
+    ),
+    limit: MAX_NOTIFICATIONS_TO_RETURN,
+  })
+}
+
+export async function getTop3UnreadNotificationsForUser(userId: UserId) {
+  return await db.query.notifications.findMany({
+    where: and(
+      eq(notifications.userId, userId),
+      eq(notifications.isRead, false)
+    ),
+    limit: MAX_NOTIFICATIONS_IN_HEADER,
+  })
+}
+
+export async function getNotificationsForUser(userId: UserId) {
+  return await db.query.notifications.findMany({
+    where: and(eq(notifications.userId, userId)),
+    limit: MAX_NOTIFICATIONS_TO_RETURN,
+  })
+}
+
 export async function getNotificationById(notificationId: number) {
-  return db.query.notifications.findFirst({
+  return await db.query.notifications.findFirst({
     where: eq(notifications.id, notificationId),
   })
 }
@@ -19,16 +73,9 @@ export async function updateNotification(
     .set(updatedNotification)
     .where(eq(notifications.id, notificationId))
     .returning()
-
   return notification
 }
 
-export async function getTop3UnreadNotificationsForUser(userId: UserId) {
-  return db.query.notifications.findMany({
-    where: and(
-      eq(notifications.userId, userId),
-      eq(notifications.isRead, false)
-    ),
-    limit: MAX_NOTIFICATIONS_IN_HEADER,
-  })
+export async function deleteNotification(notificationId: number) {
+  await db.delete(notifications).where(eq(notifications.id, notificationId))
 }

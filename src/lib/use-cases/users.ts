@@ -1,103 +1,215 @@
-import { applicationName } from '~/app-config'
-import { VerifyEmail } from '~/components/verify-email'
-import PasswordRecoveryEmail from '~/components/password-recovery-email'
-import env from '~/env'
-import { createAccount, updatePassword } from '../data-access/accounts'
-import { createProfile, getProfile } from '../data-access/profiles'
+import {
+  MAX_UPLOAD_IMAGE_SIZE,
+  MAX_UPLOAD_IMAGE_SIZE_IN_MB,
+  applicationName,
+} from "~/app-config"
 import {
   createUser,
+  deleteUser,
   getUserByEmail,
   updateUser,
   verifyPassword,
-} from '../data-access/users'
+} from "~/lib/data-access/users"
+import { UserId, UserSession } from "~/lib/use-cases/types"
+import { getFileUrl, uploadFileToBucket } from "~/utils/files"
+import env from "~/env"
 import {
-  CreateUserError,
-  EmailInUseError,
-  ExpiredEmailVerificationError,
-  InvalidTokenError,
-  LogInError,
-  UserProfileNotFoundError,
-} from './errors'
+  createAccount,
+  createAccountViaGithub,
+  createAccountViaGoogle,
+  updatePassword,
+} from "~/lib/data-access/accounts"
+import { uniqueNamesGenerator, colors, animals } from "unique-names-generator"
+import {
+  createProfile,
+  getProfile,
+  updateProfile,
+} from "~/lib/data-access/profiles"
+import { GoogleUser } from "~/app/api/login/google/callback/route"
+import { GitHubUser } from "~/app/api/login/github/callback/route"
+import {
+  createPasswordResetToken,
+  deletePasswordResetToken,
+  getPasswordResetToken,
+} from "~/lib/data-access/reset-tokens"
 import {
   createVerifyEmailToken,
   deleteVerifyEmailToken,
   getVerifyEmailToken,
-} from '../data-access/verify-email-tokens'
-import { sendEmail } from '../email/sendEmail'
-import { createPasswordRecoveryToken } from '../data-access/password-recovery'
-import { UserId } from './types'
-import { getTop3UnreadNotificationsForUser } from '../data-access/notifications'
+} from "~/lib/data-access/verify-email"
 import {
-  deletePasswordResetToken,
-  getPasswordResetToken,
-} from '../data-access/reset-tokens'
-import { createTransaction } from '../data-access/utils'
-import { deleteSessionForUser } from '../data-access/sessions'
+  getNotificationsForUser,
+  getTop3UnreadNotificationsForUser,
+} from "~/lib/data-access/notifications"
+import { createTransaction } from "~/lib/data-access/utils"
+import { LoginError, PublicError } from "./errors"
+import { deleteSessionForUser } from "~/lib/data-access/sessions"
+import { createUUID } from "~/utils/uuid"
+import { sendEmail } from "../email/sendEmail"
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js"
+import { Sql } from "postgres"
+import PasswordRecoveryEmail from "~/components/password-recovery-email"
+import { VerifyEmail } from "~/components/verify-email"
 
-export async function registerUserUseCase(
-  email: string,
-  password: string,
-  displayName: string
-) {
-  const isUserExisted = await getUserByEmail(email)
-  if (isUserExisted) {
-    throw new EmailInUseError()
+export async function deleteUserUseCase(
+  authenticatedUser: UserSession,
+  userToDeleteId: UserId
+): Promise<void> {
+  if (authenticatedUser.id !== userToDeleteId) {
+    throw new PublicError("You can only delete your own account")
   }
 
+  await deleteUser(userToDeleteId)
+}
+
+export async function getUserProfileUseCase(userId: UserId) {
+  const profile = await getProfile(userId)
+
+  if (!profile) {
+    throw new PublicError("User not found")
+  }
+
+  return profile
+}
+
+export async function registerUserUseCase(email: string, password: string) {
+  const existingUser = await getUserByEmail(email)
+  if (existingUser) {
+    throw new PublicError("An user with that email already exists.")
+  }
   const user = await createUser(email)
-  if (!user) {
-    throw new CreateUserError()
-  }
   await createAccount(user.id, password)
+
+  const displayName = uniqueNamesGenerator({
+    dictionaries: [colors, animals],
+    separator: " ",
+    style: "capital",
+  })
   await createProfile(user.id, displayName)
 
-  const token = await createVerifyEmailToken(user.id)
-  await sendEmail(
-    email,
-    `Verify your email for ${applicationName}`,
-    VerifyEmail({ token })
-  )
-}
-
-export async function verifyEmailUseCase(token: string) {
-  const tokenEntry = await getVerifyEmailToken(token)
-
-  if (!tokenEntry) {
-    throw new InvalidTokenError()
-  }
-
-  if (tokenEntry.tokenExpiresAt.getTime() < Date.now()) {
-    throw new ExpiredEmailVerificationError()
-  }
-
-  const { userId } = tokenEntry
-
-  await updateUser(userId, { emailVerified: new Date() })
-  await deleteVerifyEmailToken(token)
-  return userId
-}
-
-export async function logInUseCase(email: string, password: string) {
-  const user = await getUserByEmail(email)
-  if (!user) {
-    throw new LogInError()
-  }
-
-  const isPasswordCorrect = await verifyPassword(email, password)
-  if (!isPasswordCorrect) {
-    throw new LogInError()
+  try {
+    const token = await createVerifyEmailToken(user.id)
+    await sendEmail(
+      email,
+      `Verify your email for ${applicationName}`,
+      VerifyEmail({ token })
+    )
+  } catch (error) {
+    console.error(
+      "Verification email would not be sent, did you setup the resend API key?",
+      error
+    )
   }
 
   return { id: user.id }
 }
 
-export async function passwordRecoveryUseCase(email: string): Promise<void> {
+export async function logInUseCase(email: string, password: string) {
   const user = await getUserByEmail(email)
+
   if (!user) {
-    return
+    throw new LoginError()
   }
 
-  const token = await createPasswordRecoveryToken(user.id)
+  const isPasswordCorrect = await verifyPassword(email, password)
+
+  if (!isPasswordCorrect) {
+    throw new LoginError()
+  }
+
+  return { id: user.id }
+}
+
+export function getProfileImageKey(userId: UserId, imageId: string) {
+  return `users/${userId}/images/${imageId}`
+}
+
+export async function updateProfileImageUseCase(file: File, userId: UserId) {
+  if (!file.type.startsWith("image/")) {
+    throw new PublicError("File should be an image.")
+  }
+
+  if (file.size > MAX_UPLOAD_IMAGE_SIZE) {
+    throw new PublicError(
+      `File size should be less than ${MAX_UPLOAD_IMAGE_SIZE_IN_MB}MB.`
+    )
+  }
+
+  const imageId = createUUID()
+
+  await uploadFileToBucket(file, getProfileImageKey(userId, imageId))
+  await updateProfile(userId, { imageId })
+}
+
+export function getProfileImageUrl(userId: UserId, imageId: string) {
+  return `${env.HOST_NAME}/api/users/${userId}/images/${imageId ?? "default"}`
+}
+
+export function getDefaultImage(userId: UserId) {
+  return `${env.HOST_NAME}/api/users/${userId}/images/default`
+}
+
+export async function getProfileImageUrlUseCase({
+  userId,
+  imageId,
+}: {
+  userId: UserId
+  imageId: string
+}) {
+  const url = await getFileUrl({
+    key: getProfileImageKey(userId, imageId),
+  })
+
+  return url
+}
+
+export async function updateProfileBioUseCase(userId: UserId, bio: string) {
+  await updateProfile(userId, { bio })
+}
+
+export async function updateProfileNameUseCase(
+  userId: UserId,
+  displayName: string
+) {
+  await updateProfile(userId, { displayName })
+}
+
+export async function createGithubUserUseCase(githubUser: GitHubUser) {
+  let existingUser = await getUserByEmail(githubUser.email)
+
+  if (!existingUser) {
+    existingUser = await createUser(githubUser.email)
+  }
+
+  await createAccountViaGithub(existingUser.id, githubUser.id)
+
+  await createProfile(existingUser.id, githubUser.login, githubUser.avatar_url)
+
+  return existingUser.id
+}
+
+export async function createGoogleUserUseCase(googleUser: GoogleUser) {
+  let existingUser = await getUserByEmail(googleUser.email)
+
+  if (!existingUser) {
+    existingUser = await createUser(googleUser.email)
+  }
+
+  await createAccountViaGoogle(existingUser.id, googleUser.sub)
+
+  await createProfile(existingUser.id, googleUser.name, googleUser.picture)
+
+  return existingUser.id
+}
+
+export async function passwordRecoveryUseCase(email: string) {
+  const user = await getUserByEmail(email)
+
+  if (!user) {
+    return null
+  }
+
+  const token = await createPasswordResetToken(user.id)
 
   await sendEmail(
     email,
@@ -106,36 +218,48 @@ export async function passwordRecoveryUseCase(email: string): Promise<void> {
   )
 }
 
-export async function getUnreadNotificationForUserUseCase(userId: UserId) {
-  return getTop3UnreadNotificationsForUser(userId)
-}
-
-export async function getUserProfileUseCase(userId: UserId) {
-  const profile = await getProfile(userId)
-
-  if (!profile) {
-    throw new UserProfileNotFoundError()
-  }
-
-  return profile
-}
-
-export function getProfileImageUrl(userId: UserId, imageId: string) {
-  return `${env.HOST_NAME}/api/users/${userId}/images/${imageId ?? 'default'}`
-}
-
 export async function changePasswordUseCase(token: string, password: string) {
   const tokenEntry = await getPasswordResetToken(token)
 
   if (!tokenEntry) {
-    throw new InvalidTokenError()
+    throw new PublicError("Invalid token")
   }
 
-  const { userId } = tokenEntry
+  const userId = tokenEntry.userId
 
-  await createTransaction(async (trx) => {
-    await deletePasswordResetToken(token, trx)
-    await updatePassword(userId, password, trx)
-    await deleteSessionForUser(userId, trx)
-  })
+  await createTransaction(
+    async (
+      trx:
+        | (PostgresJsDatabase<typeof import("../db/schema")> & { $client: Sql })
+        | undefined
+    ) => {
+      await deletePasswordResetToken(token, trx)
+      await updatePassword(userId, password, trx)
+      await deleteSessionForUser(userId, trx)
+    }
+  )
+}
+
+export async function verifyEmailUseCase(token: string) {
+  const tokenEntry = await getVerifyEmailToken(token)
+
+  if (!tokenEntry) {
+    throw new PublicError("Invalid token")
+  }
+
+  const userId = tokenEntry.userId
+
+  await updateUser(userId, { emailVerified: new Date() })
+  await deleteVerifyEmailToken(token)
+  return userId
+}
+
+export async function getUnreadNotificationsForUserUseCase(userId: UserId) {
+  return await getTop3UnreadNotificationsForUser(userId)
+}
+
+export async function getNotificationsForUserUseCase(userId: UserId) {
+  const notifications = await getNotificationsForUser(userId)
+  notifications.sort((a, b) => b.createdOn.getTime() - a.createdOn.getTime())
+  return notifications
 }

@@ -1,5 +1,11 @@
+import {
+  createSubscription,
+  getSubscription,
+  updateSubscription,
+} from "~/lib/data-access/subscriptions"
+import { Subscription } from "~/lib/db/schema"
 import env from "~/env"
-import { Subscription } from "../db"
+import { Plan, UserId } from "~/lib/use-cases/types"
 
 export function getSubscriptionPlan(subscription?: Subscription) {
   if (!subscription) {
@@ -9,4 +15,27 @@ export function getSubscriptionPlan(subscription?: Subscription) {
       ? "premium"
       : "basic"
   }
+}
+
+export async function getUserPlanUseCase(userId: UserId): Promise<Plan> {
+  const subscription = await getSubscription(userId)
+  return getSubscriptionPlan(subscription)
+}
+
+export async function createSubscriptionUseCase(subscription: {
+  userId: UserId
+  stripeSubscriptionId: string
+  stripeCustomerId: string
+  stripePriceId: string
+  stripeCurrentPeriodEnd: Date
+}) {
+  await createSubscription(subscription)
+}
+
+export async function updateSubscriptionUseCase(subscription: {
+  stripeSubscriptionId: string
+  stripePriceId: string
+  stripeCurrentPeriodEnd: Date
+}) {
+  await updateSubscription(subscription)
 }
