@@ -4,6 +4,8 @@ import Link from "next/link"
 import { LANDING_PAGE_FEATURE_ITEMS } from "~/components/landing-page-features"
 import { Button } from "~/components/ui/button"
 import { getI18n } from "~/lib/locales/server"
+import { appMode } from "~/app-config"
+import { NewsletterForm } from "./(coming-soon)/newsletter-form"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getI18n()
@@ -24,8 +26,27 @@ export default async function Home({
 
   console.log(t("hello"))
 
+  // if (appMode === "comingSoon") {
+  //   return <ComingSoon />
+  // }
+
+  if (appMode === "maintenance") {
+    return (
+      <div>
+        <h1>Maintenance...</h1>
+      </div>
+    )
+  }
+
   return (
     <>
+      <section>
+        {appMode === "comingSoon" && (
+          <div className="fixed">
+            <h1>Comming soon...</h1>
+          </div>
+        )}
+      </section>
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
           <div className="mx-auto place-self-center">
@@ -58,6 +79,9 @@ export default async function Home({
                 Deploy Now
               </Link>
             </Button>
+            <div className="mt-4 w-[60%] place-self-center">
+              <NewsletterForm />
+            </div>
           </div>
         </div>
       </section>

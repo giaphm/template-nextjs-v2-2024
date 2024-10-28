@@ -1,6 +1,6 @@
 export const applicationName = "APP"
 
-export const appMode: "comingSoon" | "maintenance" | "live" = "live"
+export const appMode: "comingSoon" | "maintenance" | "live" = "comingSoon"
 
 export enum PATHS {
   Home = "/",

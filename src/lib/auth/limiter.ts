@@ -48,8 +48,8 @@ export async function rateLimitByIp({
   window = 10000,
 }: {
   key: string
-  limit: number
-  window: number
+  limit?: number
+  window?: number
 }) {
   const ip = getIp()
 

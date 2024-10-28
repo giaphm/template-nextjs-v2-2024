@@ -189,6 +189,9 @@ export const newsletters = pgTable("gf_newsletter", {
   ),
 })
 
+export type Newsletter = typeof newsletters.$inferSelect
+export type NewNewsletter = typeof newsletters.$inferInsert
+
 export const groups = pgTable(
   "groups",
   {
