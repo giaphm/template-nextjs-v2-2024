@@ -7,12 +7,7 @@ export default createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
-    DATABASE_URL: z.string().url(),
-    DB_HOST: z.string().min(1),
-    DB_PORT: z.number().positive(),
-    DB_USERNAME: z.string().min(4),
-    DB_PASSWORD: z.string().min(4),
-    DB_NAME: z.string().min(3),
+    POSTGRES_URL: z.string().url(),
     NODE_ENV: z.string().optional(),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
@@ -53,12 +48,7 @@ export default createEnv({
    * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
    */
   runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    DB_HOST: process.env.DB_HOST,
-    DB_PORT: Number(process.env.DB_PORT),
-    DB_USERNAME: process.env.DB_USERNAME,
-    DB_PASSWORD: process.env.DB_PASSWORD,
-    DB_NAME: process.env.DB_NAME,
+    POSTGRES_URL: process.env.POSTGRES_URL,
     NODE_ENV: process.env.NODE_ENV,
     EMAIL_FROM: process.env.EMAIL_FROM,
     EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,

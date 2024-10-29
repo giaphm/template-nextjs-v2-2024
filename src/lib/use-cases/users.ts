@@ -1,17 +1,14 @@
+import { VercelPgClient, VercelPgDatabase } from "drizzle-orm/vercel-postgres"
+import { animals, colors, uniqueNamesGenerator } from "unique-names-generator"
 import {
   MAX_UPLOAD_IMAGE_SIZE,
   MAX_UPLOAD_IMAGE_SIZE_IN_MB,
   applicationName,
 } from "~/app-config"
-import {
-  createUser,
-  deleteUser,
-  getUserByEmail,
-  updateUser,
-  verifyPassword,
-} from "~/lib/data-access/users"
-import { UserId, UserSession } from "~/lib/use-cases/types"
-import { getFileUrl, uploadFileToBucket } from "~/utils/files"
+import { GitHubUser } from "~/app/api/login/github/callback/route"
+import { GoogleUser } from "~/app/api/login/google/callback/route"
+import PasswordRecoveryEmail from "~/components/password-recovery-email"
+import { VerifyEmail } from "~/components/verify-email"
 import env from "~/env"
 import {
   createAccount,
@@ -19,37 +16,39 @@ import {
   createAccountViaGoogle,
   updatePassword,
 } from "~/lib/data-access/accounts"
-import { uniqueNamesGenerator, colors, animals } from "unique-names-generator"
+import {
+  getNotificationsForUser,
+  getTop3UnreadNotificationsForUser,
+} from "~/lib/data-access/notifications"
 import {
   createProfile,
   getProfile,
   updateProfile,
 } from "~/lib/data-access/profiles"
-import { GoogleUser } from "~/app/api/login/google/callback/route"
-import { GitHubUser } from "~/app/api/login/github/callback/route"
 import {
   createPasswordResetToken,
   deletePasswordResetToken,
   getPasswordResetToken,
 } from "~/lib/data-access/reset-tokens"
+import { deleteSessionForUser } from "~/lib/data-access/sessions"
+import {
+  createUser,
+  deleteUser,
+  getUserByEmail,
+  updateUser,
+  verifyPassword,
+} from "~/lib/data-access/users"
+import { createTransaction } from "~/lib/data-access/utils"
 import {
   createVerifyEmailToken,
   deleteVerifyEmailToken,
   getVerifyEmailToken,
 } from "~/lib/data-access/verify-email"
-import {
-  getNotificationsForUser,
-  getTop3UnreadNotificationsForUser,
-} from "~/lib/data-access/notifications"
-import { createTransaction } from "~/lib/data-access/utils"
-import { LoginError, PublicError } from "./errors"
-import { deleteSessionForUser } from "~/lib/data-access/sessions"
+import { UserId, UserSession } from "~/lib/use-cases/types"
+import { getFileUrl, uploadFileToBucket } from "~/utils/files"
 import { createUUID } from "~/utils/uuid"
 import { sendEmail } from "../email/sendEmail"
-import { PostgresJsDatabase } from "drizzle-orm/postgres-js"
-import { Sql } from "postgres"
-import PasswordRecoveryEmail from "~/components/password-recovery-email"
-import { VerifyEmail } from "~/components/verify-email"
+import { LoginError, PublicError } from "./errors"
 
 export async function deleteUserUseCase(
   authenticatedUser: UserSession,
@@ -230,7 +229,9 @@ export async function changePasswordUseCase(token: string, password: string) {
   await createTransaction(
     async (
       trx:
-        | (PostgresJsDatabase<typeof import("../db/schema")> & { $client: Sql })
+        | (VercelPgDatabase<typeof import("../db/schema")> & {
+            $client: VercelPgClient
+          })
         | undefined
     ) => {
       await deletePasswordResetToken(token, trx)

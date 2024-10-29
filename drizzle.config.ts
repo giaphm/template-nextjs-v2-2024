@@ -1,17 +1,13 @@
-import { defineConfig } from 'drizzle-kit'
-import 'dotenv/config'
-import { get } from 'env-var'
+import { defineConfig } from "drizzle-kit"
+import { get } from "env-var"
+import "~/lib/dotenv"
 
 export default defineConfig({
-  schema: './src/lib/db/schema.ts',
-  out: './migration',
-  dialect: 'postgresql',
+  schema: "./src/lib/db/schema.ts",
+  out: "./migration",
+  dialect: "postgresql",
   dbCredentials: {
-    host: get('DB_HOST').required().asString(),
-    port: get('DB_PORT').required().asIntPositive(),
-    user: get('DB_USERNAME').required().asString(),
-    password: get('DB_PASSWORD').required().asString(),
-    database: get('DB_NAME').required().asString(),
-    ssl: false,
+    url: get("POSTGRES_URL").required().asString(),
+    ssl: true,
   },
 })

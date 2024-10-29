@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { faker } from "@faker-js/faker"
 import { accounts, groups, profiles, users } from "./schema"
-import { queryClient, db } from "./database"
+import { db, queryClient } from "./database"
 import { hashPassword } from "../auth/hashing"
 
 const main = async () => {
@@ -21,7 +21,7 @@ const main = async () => {
     })
 
     newAccounts.push({
-      userId: 121 + i,
+      userId: 100 + i,
       accountType: "email",
       githubId: faker.string.alphanumeric(10),
       googleId: faker.string.alphanumeric(10),
@@ -30,21 +30,21 @@ const main = async () => {
     })
 
     newProfiles.push({
-      userId: 121 + i,
+      userId: 100 + i,
       displayName: faker.internet.displayName(),
     })
 
     newGroups.push({
-      userId: 121 + i,
+      userId: 100 + i,
       name: faker.company.name(),
       description: "description...",
     })
   }
 
   console.log("Seed start")
-  // await db.insert(users).values(newUsers)
-  // await db.insert(accounts).values(newAccounts)
-  // await db.insert(profiles).values(newProfiles)
+  await db.insert(users).values(newUsers)
+  await db.insert(accounts).values(newAccounts)
+  await db.insert(profiles).values(newProfiles)
   await db.insert(groups).values(newGroups)
   console.log("Seed done")
   await queryClient.end()
