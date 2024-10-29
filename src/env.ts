@@ -44,6 +44,7 @@ export default createEnv({
     NEXT_PUBLIC_PRICE_ID_BASIC: z.string().min(1),
     NEXT_PUBLIC_PRICE_ID_PREMIUM: z.string().min(1),
     NEXT_PUBLIC_STRIPE_MANAGE_URL: z.string().min(1),
+    NEXT_PUBLIC_APP_URL: z.string().min(1),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -83,5 +84,6 @@ export default createEnv({
     NEXT_PUBLIC_PRICE_ID_BASIC: process.env.NEXT_PUBLIC_PRICE_ID_BASIC,
     NEXT_PUBLIC_PRICE_ID_PREMIUM: process.env.NEXT_PUBLIC_PRICE_ID_PREMIUM,
     NEXT_PUBLIC_STRIPE_MANAGE_URL: process.env.NEXT_PUBLIC_STRIPE_MANAGE_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
 })

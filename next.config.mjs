@@ -1,4 +1,10 @@
 import { createMDX } from "fumadocs-mdx/next"
+import withBundleAnalyzer from "@next/bundle-analyzer"
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+  openAnalyzer: false,
+})
 
 const withMDX = createMDX()
 
@@ -33,4 +39,4 @@ const nextConfig = {
   },
 }
 
-export default withMDX(nextConfig)
+export default bundleAnalyzer(withMDX(nextConfig))
