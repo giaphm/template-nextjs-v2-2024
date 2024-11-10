@@ -23,5 +23,11 @@ export default {
       "desc": "Dashboard",
     },
   },
+  "landing": {
+    "metadata": {
+      "title": "Landing page",
+      "desc": "Landing page",
+    },
+  },
   "passwordNotMatched": "Mật khẩu nhập lại ko hợp đúng",
 } as const

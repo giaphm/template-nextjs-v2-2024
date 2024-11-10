@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import {
   Select,
@@ -6,10 +6,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '~/components/ui/select'
+} from "~/components/ui/select"
 
-import React from 'react'
-import { useChangeLocale, useCurrentLocale } from '~/lib/locales/client'
+import React from "react"
+import { useChangeLocale, useCurrentLocale } from "~/lib/locales/client"
 
 export default function Locale() {
   const changeLocale = useChangeLocale()
@@ -18,9 +18,9 @@ export default function Locale() {
   return (
     <Select
       defaultValue={locale}
-      onValueChange={(value: 'en' | 'vn') => changeLocale(value)}
+      onValueChange={(value: "en" | "vn") => changeLocale(value)}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full dark:text-black">
         <SelectValue placeholder="Locale" />
       </SelectTrigger>
       <SelectContent>

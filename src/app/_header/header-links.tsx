@@ -58,15 +58,15 @@ export default function HeaderLinks({
 
       {(isLandingPage || !isAuthenticated) && (
         <div className="hidden gap-4 md:flex">
-          <Button variant="link" asChild>
+          <Button variant="link" asChild className="dark:text-black">
             <Link href="/#features">Features</Link>
           </Button>
 
-          <Button variant="link" asChild>
+          <Button variant="link" asChild className="dark:text-black">
             <Link href="/#pricing">Pricing</Link>
           </Button>
 
-          <Button variant="link" asChild>
+          <Button variant="link" asChild className="dark:text-black">
             <Link href="/browse">Browse Groups</Link>
           </Button>
         </div>

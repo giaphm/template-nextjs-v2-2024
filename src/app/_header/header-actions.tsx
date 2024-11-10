@@ -1,18 +1,18 @@
-import React, { Suspense } from 'react'
+import React, { Suspense } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
-import { getCurrentUser } from '~/lib/auth'
-import { ProfileAvatar } from '~/components/profile-avatar'
-import Link from 'next/link'
-import { Settings2Icon } from 'lucide-react'
-import { Button } from '~/components/ui/button'
-import NotificationsWrapper from './notification-wrapper'
-import SignOutItem from './sign-out-item'
-import MenuButton from './menu-button'
+} from "~/components/ui/dropdown-menu"
+import { getCurrentUser } from "~/lib/auth"
+import { ProfileAvatar } from "~/components/profile-avatar"
+import Link from "next/link"
+import { Settings2Icon } from "lucide-react"
+import { Button } from "~/components/ui/button"
+import NotificationsWrapper from "./notification-wrapper"
+import SignOutItem from "./sign-out-item"
+import MenuButton from "./menu-button"
 
 export default async function HeaderActions() {
   const user = await getCurrentUser()
@@ -56,7 +56,7 @@ export default async function HeaderActions() {
           </div>
         </div>
       ) : (
-        <Button asChild variant="secondary">
+        <Button asChild className="dark:border-black dark:bg-white">
           <Link href="/login">Log In</Link>
         </Button>
       )}

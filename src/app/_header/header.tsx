@@ -24,7 +24,7 @@ export default async function Header() {
               height={40}
               className="h-[40px] w-[40px] rounded-full"
             />
-            <span className="text-sm font-bold md:text-base lg:text-2xl">
+            <span className="text-sm font-bold dark:text-black md:text-base lg:text-2xl">
               {applicationName}
             </span>
           </Link>

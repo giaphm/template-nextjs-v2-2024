@@ -29,5 +29,11 @@ export default {
       "desc": "Dashboard",
     },
   },
+  "landing": {
+    "metadata": {
+      "title": "Landing page",
+      "desc": "Landing page",
+    },
+  },
   "passwordNotMatched": "Passwords not matched",
 } as const

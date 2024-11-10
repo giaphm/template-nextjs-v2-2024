@@ -8,6 +8,7 @@ import { appMode } from "~/app-config"
 import { geistMono, geistSans } from "~/utils/fonts"
 import { getStaticParams } from "~/lib/locales/server"
 import { setStaticParamsLocale } from "next-international/server"
+import Header from "~/app/_header/header"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -60,6 +61,7 @@ export default function RootLayout({
       >
         <Providers>
           <NextTopLoader />
+          {appMode === "live" && <Header />}
           <main>{children}</main>
         </Providers>
         <Toaster />

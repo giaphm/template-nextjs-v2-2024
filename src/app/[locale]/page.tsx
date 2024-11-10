@@ -3,16 +3,16 @@ import { setStaticParamsLocale } from "next-international/server"
 import Link from "next/link"
 import { LANDING_PAGE_FEATURE_ITEMS } from "~/components/landing-page-features"
 import { Button } from "~/components/ui/button"
-import { getI18n } from "~/lib/locales/server"
+import { getI18n, getScopedI18n } from "~/lib/locales/server"
 import { appMode } from "~/app-config"
 import { NewsletterForm } from "./(coming-soon)/newsletter-form"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getI18n()
+  const t = await getScopedI18n("landing.metadata")
 
   return {
-    title: t("hello"),
-    description: t("hello.world"),
+    title: t("title"),
+    description: t("desc"),
   }
 }
 
@@ -48,7 +48,7 @@ export default async function Home({
         )}
       </section>
       <section className="bg-white dark:bg-gray-900">
-        <div className="mx-auto grid max-w-screen-xl px-4 py-8 text-center lg:py-16">
+        <div className="mx-auto grid max-w-screen-xl px-4 pb-8 pt-16 text-center lg:pb-16 lg:pt-32">
           <div className="mx-auto place-self-center">
             <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight dark:text-white md:text-5xl xl:text-6xl">
               Template Next.js v2 2024
@@ -63,14 +63,14 @@ export default async function Home({
               asChild
               className="rounded-xl bg-blue-400 p-7 text-lg font-bold hover:bg-blue-500"
             >
-              <Link href="/login" className="mr-3">
+              <Link href="/login" className="mr-3 dark:text-white">
                 Log in
               </Link>
             </Button>
             <Button
               variant="secondary"
               asChild
-              className="rounded-xl p-7 text-lg font-bold hover:bg-neutral-200"
+              className="rounded-xl p-7 text-lg font-bold hover:bg-neutral-200 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
             >
               <Link href="https://vercel.com/new/git/external?repository-url=https://github.com/giaphm/template-nextjs-v2-2024">
                 Deploy Now
