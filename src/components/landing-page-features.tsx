@@ -20,6 +20,47 @@ export const LANDING_PAGE_FEATURE_ITEMS = [
     ),
   },
   {
+    title: "Docker and Docker-compose",
+    description:
+      "Building image for production or running multi-container applications",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Shadcn-ui",
+    description: "A library for accessible and customizable components.",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"
+        />
+      </svg>
+    ),
+  },
+  {
     title: "Tailwind CSS",
     description: "A utility-first CSS framework for rapid UI development.",
     icon: (
@@ -180,26 +221,6 @@ export const LANDING_PAGE_FEATURE_ITEMS = [
     ),
   },
   {
-    title: "Storybook",
-    description: "Create, test, and showcase your components.",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="h-6 w-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-        />
-      </svg>
-    ),
-  },
-  {
     title: "Server-side tables",
     description:
       "Create a Tanstack data table with server-side features: Filtering, Sorting, Searching, Pagination",
@@ -256,6 +277,26 @@ export const LANDING_PAGE_FEATURE_ITEMS = [
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M4.5 12.75l6 6 9-13.5"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "NUQS",
+    description: "Type-safe search params state manager for React",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"
         />
       </svg>
     ),
@@ -487,8 +528,8 @@ export const LANDING_PAGE_FEATURE_ITEMS = [
     ),
   },
   {
-    title: "Renovate BOT",
-    description: "Auto-updating dependencies, so you can focus on coding.",
+    title: "Nextjs-toploader",
+    description: "A Next.js Top Loading Bar component made using nprogress.",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -501,11 +542,31 @@ export const LANDING_PAGE_FEATURE_ITEMS = [
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+          d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"
         />
       </svg>
     ),
   },
+  // {
+  //   title: "Renovate BOT",
+  //   description: "Auto-updating dependencies, so you can focus on coding.",
+  //   icon: (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       fill="none"
+  //       viewBox="0 0 24 24"
+  //       strokeWidth={1.5}
+  //       stroke="currentColor"
+  //       className="h-6 w-6"
+  //     >
+  //       <path
+  //         strokeLinecap="round"
+  //         strokeLinejoin="round"
+  //         d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+  //       />
+  //     </svg>
+  //   ),
+  // },
   // {
   //   title: "Patch-package",
   //   description: "Fix external dependencies without losing your mind.",
@@ -551,27 +612,27 @@ export const LANDING_PAGE_FEATURE_ITEMS = [
   //     </svg>
   //   ),
   // },
-  {
-    title: "GitHub Actions",
-    description:
-      "Pre-configured actions for smooth workflows, including Bundle Size and performance stats.",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="h-6 w-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-        />
-      </svg>
-    ),
-  },
+  // {
+  //   title: "GitHub Actions",
+  //   description:
+  //     "Pre-configured actions for smooth workflows, including Bundle Size and performance stats.",
+  //   icon: (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       fill="none"
+  //       viewBox="0 0 24 24"
+  //       strokeWidth={1.5}
+  //       stroke="currentColor"
+  //       className="h-6 w-6"
+  //     >
+  //       <path
+  //         strokeLinecap="round"
+  //         strokeLinejoin="round"
+  //         d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
+  //       />
+  //     </svg>
+  //   ),
+  // },
   // {
   //   title: "Automated ChatGPT Code Reviews",
   //   description: "Stay on the cutting edge with AI-powered code reviews!",

@@ -9,6 +9,7 @@ import { redirect } from "next/navigation"
 import { PATHS } from "~/app-config"
 import { MagicLinkForm } from "./_components/magic-link-form"
 import { setStaticParamsLocale } from "next-international/server"
+import { enableOAuth } from "~/app-config"
 
 export default async function LogIn({
   params: { locale },
@@ -111,7 +112,7 @@ export default async function LogIn({
                 buttonVariants({
                   variant: "secondary",
                 }),
-                "w-full"
+                `w-full ${enableOAuth ? "" : "cursor-not-allowed opacity-50"}`
               )}
             >
               <GoogleIcon className="mr-2 h-5 w-5 stroke-white" />
@@ -123,7 +124,7 @@ export default async function LogIn({
                 buttonVariants({
                   variant: "secondary",
                 }),
-                "w-full"
+                `w-full ${enableOAuth ? "" : "cursor-not-allowed opacity-50"}`
               )}
             >
               <GithubIcon className="mr-2 h-5 w-5" />

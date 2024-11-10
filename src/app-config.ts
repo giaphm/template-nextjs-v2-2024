@@ -1,6 +1,6 @@
 export const applicationName = "APP"
 
-export const appMode: "comingSoon" | "maintenance" | "live" = "comingSoon"
+export const appMode: "comingSoon" | "maintenance" | "live" = "live"
 
 export enum PATHS {
   Home = "/",
@@ -20,3 +20,5 @@ export const MAX_GROUP_PREMIUM_LIMIT = 50
 
 export const MAX_UPLOAD_IMAGE_SIZE_IN_MB = 5
 export const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024 * MAX_UPLOAD_IMAGE_SIZE_IN_MB
+
+export const enableOAuth = false

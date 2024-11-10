@@ -63,11 +63,8 @@ export default async function Home({
               asChild
               className="rounded-xl bg-blue-400 p-7 text-lg font-bold hover:bg-blue-500"
             >
-              <Link
-                href="https://github.com/giaphm/template-nextjs-v2-2024"
-                className="mr-3"
-              >
-                Get started
+              <Link href="/login" className="mr-3">
+                Log in
               </Link>
             </Button>
             <Button
@@ -79,7 +76,7 @@ export default async function Home({
                 Deploy Now
               </Link>
             </Button>
-            <div className="mt-4 w-[60%] place-self-center">
+            <div className="mt-8 w-[60%] place-self-center">
               <NewsletterForm />
             </div>
           </div>
