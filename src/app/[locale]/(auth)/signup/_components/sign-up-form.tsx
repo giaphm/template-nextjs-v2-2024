@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useServerAction } from 'zsa-react'
-import { useToast } from '~/hooks/use-toast'
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useServerAction } from "zsa-react"
+import { useToast } from "~/hooks/use-toast"
 import {
   Form,
   FormControl,
@@ -13,19 +13,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '~/components/ui/form'
-import { Input } from '~/components/ui/input'
-import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
-import { Terminal } from 'lucide-react'
-import { LoaderButton } from '~/components/loader-button'
-import { signUpAction } from '../actions'
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Terminal } from "lucide-react"
+import { LoaderButton } from "~/components/loader-button"
+import { signUpAction } from "../actions"
 
 export const signUpSchema = z.object({
-  email: z.string().email('Please enter a valid email'),
-  displayName: z.string().min(1, 'Please provide your display name.').max(255),
-  password: z.string().min(1, 'Please provide your password.').max(255),
+  email: z.string().email("Please enter a valid email"),
+  displayName: z.string().min(1, "Please provide your display name.").max(255),
+  password: z.string().min(1, "Please provide your password.").max(255),
   passwordConfirm: z.string().min(1, {
-    message: 'Please provide your password confirm.',
+    message: "Please provide your password confirm.",
   }),
 })
 
@@ -36,9 +36,9 @@ export default function SignUpForm() {
   const { isPending, execute, error } = useServerAction(signUpAction, {
     onError({ err }) {
       toast({
-        title: 'Something went wrong',
+        title: "Something went wrong",
         description: err.message,
-        variant: 'destructive',
+        variant: "destructive",
       })
     },
   })
@@ -46,15 +46,19 @@ export default function SignUpForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      email: '',
-      displayName: '',
-      password: '',
-      passwordConfirm: '',
+      email: "",
+      displayName: "",
+      password: "",
+      passwordConfirm: "",
     },
   })
 
-  function onSubmit(values: SignUpInput) {
-    execute(values)
+  async function onSubmit(values: SignUpInput) {
+    const [data] = await execute(values)
+
+    alert(
+      `Sign up successfully! You can go to link: ${location.origin}/api/login/verifiy-email?token=${data?.token} to verify email. We disable emailing for development`
+    )
   }
 
   return (

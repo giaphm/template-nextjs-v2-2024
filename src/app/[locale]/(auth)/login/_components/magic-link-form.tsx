@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { z } from 'zod'
-import { Input } from '~/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { z } from "zod"
+import { Input } from "~/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import {
   Form,
   FormControl,
@@ -11,12 +11,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '~/components/ui/form'
-import { LoaderButton } from '~/components/loader-button'
-import { useServerAction } from 'zsa-react'
-import { useToast } from '~/hooks/use-toast'
-import NProgress from 'nprogress'
-import { logInMagicLinkAction } from '../actions'
+} from "~/components/ui/form"
+import { LoaderButton } from "~/components/loader-button"
+import { useServerAction } from "zsa-react"
+import { useToast } from "~/hooks/use-toast"
+import NProgress from "nprogress"
+import { logInMagicLinkAction } from "../actions"
 
 const magicLinkSchema = z.object({
   email: z.string().email(),
@@ -28,9 +28,9 @@ export function MagicLinkForm() {
   const { execute, isPending } = useServerAction(logInMagicLinkAction, {
     onError({ err }) {
       toast({
-        title: 'Something went wrong',
+        title: "Something went wrong",
         description: err.message,
-        variant: 'destructive',
+        variant: "destructive",
       })
     },
   })
@@ -38,14 +38,19 @@ export function MagicLinkForm() {
   const form = useForm<z.infer<typeof magicLinkSchema>>({
     resolver: zodResolver(magicLinkSchema),
     defaultValues: {
-      email: '',
+      email: "",
     },
   })
 
   async function onSubmit(values: z.infer<typeof magicLinkSchema>) {
     NProgress.start()
-    await execute(values)
+    const [data] = await execute(values)
+    console.log("data", data)
     NProgress.done()
+
+    alert(
+      `Sending magic link successfully! You can go to link: ${location.origin}/api/login/magic-link?token=${data?.token} to verify login. We disable emailing for development`
+    )
   }
 
   return (

@@ -1,22 +1,22 @@
-import { applicationName } from '~/app-config'
-import MagicLinkEmail from '~/components/magic-link-email'
-import { sendEmail } from '../email/sendEmail'
+import { applicationName } from "~/app-config"
+import MagicLinkEmail from "~/components/magic-link-email"
+import { sendEmail } from "../email/sendEmail"
 import {
   getMagicLinkByToken,
   upsertMagicLink,
   deleteMagicToken,
-} from '../data-access/magic-links'
+} from "../data-access/magic-links"
 import {
   ExpiredMagicLinkTokenError,
   InvalidMagicLinkTokenError,
-} from './errors'
+} from "./errors"
 import {
   createMagicUser,
   getUserByEmail,
   setEmailVerified,
-} from '../data-access/users'
-import { faker } from '@faker-js/faker'
-import { createProfile } from '../data-access/profiles'
+} from "../data-access/users"
+import { faker } from "@faker-js/faker"
+import { createProfile } from "../data-access/profiles"
 
 export async function sendMagicLinkUseCase(email: string) {
   const token = await upsertMagicLink(email)
@@ -26,6 +26,23 @@ export async function sendMagicLinkUseCase(email: string) {
     `Your magic log-in link for ${applicationName}`,
     MagicLinkEmail({ token })
   )
+}
+
+export async function sendMagicLinkReturnTokenUseCase(email: string) {
+  const token = await upsertMagicLink(email)
+  console.log("token", token)
+
+  try {
+    await sendEmail(
+      email,
+      `Your magic log-in link for ${applicationName}`,
+      MagicLinkEmail({ token })
+    )
+  } catch (error) {
+    console.error(error)
+  }
+
+  return { token }
 }
 
 export async function loginWithMagicLinkUseCase(token: string) {

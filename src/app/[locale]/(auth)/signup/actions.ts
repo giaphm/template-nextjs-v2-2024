@@ -1,11 +1,9 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { z } from "zod"
-import { PATHS } from "~/app-config"
 import { unauthenticatedAction } from "~/lib/auth/action-procedures"
 import { rateLimitByIp } from "~/lib/auth/limiter"
-import { registerUserUseCase } from "~/lib/use-cases/users"
+import { registerUserReturnTokenUseCase } from "~/lib/use-cases/users"
 
 export const signUpAction = unauthenticatedAction
   .createServerAction()
@@ -31,6 +29,5 @@ export const signUpAction = unauthenticatedAction
     await rateLimitByIp({ key: "register", limit: 3, window: 30000 })
 
     const { email, password } = input
-    await registerUserUseCase(email, password)
-    return redirect(PATHS.VerifyEmail)
+    return await registerUserReturnTokenUseCase(email, password)
   })
