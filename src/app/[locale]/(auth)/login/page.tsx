@@ -143,6 +143,7 @@ export default async function LogIn({
           </div>
           <div className="space-y-4">
             <Link
+              prefetch
               href="/signup"
               className={cn(
                 buttonVariants({
