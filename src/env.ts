@@ -76,4 +76,6 @@ export default createEnv({
     NEXT_PUBLIC_STRIPE_MANAGE_URL: process.env.NEXT_PUBLIC_STRIPE_MANAGE_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
+
+  skipValidation: !!process.env.SKIP_VALIDATION,
 })
