@@ -4,7 +4,7 @@
     "src/**/*.ts",
     "src/**/*.js",
     "test/**/*.ts",
-    ".eslintrc.js",
+    ".eslintrc.json",
     "**/*.ts",
     "**/*.tsx"
   ]

@@ -23,6 +23,7 @@
   "ignorePatterns": [
     "lint-staged.config.mjs",
     "commitlint.config.mjs",
-    "next.config.mjs"
+    "next.config.mjs",
+    "cypress.config.ts"
   ]
 }
